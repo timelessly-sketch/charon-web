@@ -65,7 +65,7 @@ const appStore = useAppStore()
       <!-- 121 = 16 + 45 + 60 45是面包屑高度 60是标签栏高度 -->
       <!-- 56 = 16 + 40 40是页脚高度 -->
       <div
-        class="flex-1 p-16px flex flex-col"
+        class="flex-1 p-10px flex flex-col"
         :class="{
           'p-t-121px': appStore.showTabs,
           'p-b-56px': appStore.showFooter && !appStore.contentFullScreen,

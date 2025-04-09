@@ -8,6 +8,7 @@ import FullScreen from './header/FullScreen.vue'
 import Notices from './header/Notices.vue'
 import Search from './header/Search.vue'
 import UserCenter from './header/UserCenter.vue'
+import ProductionItem from './header/ProductionItem.vue'
 
 import Logo from './sider/Logo.vue'
 import Menu from './sider/Menu.vue'
@@ -22,6 +23,7 @@ export {
   Logo,
   Menu,
   Notices,
+  ProductionItem,
   Search,
   Setting,
   SettingDrawer,

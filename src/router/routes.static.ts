@@ -16,7 +16,7 @@ export const staticRoutes: AppRoute.RowRoute[] = [
     title: '工作台',
     requiresAuth: true,
     icon: 'icon-park-outline:alarm',
-    pinTab: true,
+    // pinTab: true,
     menuType: 'page',
     componentPath: '/dashboard/workbench/index.vue',
     id: 2,

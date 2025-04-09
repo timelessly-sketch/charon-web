@@ -4,12 +4,9 @@ import {
   BackTop,
   Breadcrumb,
   CollapaseButton,
-  FullScreen,
   Logo,
   Menu,
-  Notices,
-  Search,
-  Setting,
+  ProductionItem,
   TabBar,
   UserCenter,
 } from './components'
@@ -47,17 +44,18 @@ const appStore = useAppStore()
       <n-layout-header bordered position="absolute" class="z-999">
         <div v-if="!appStore.contentFullScreen" class="h-60px flex-y-center justify-between">
           <div class="flex-y-center h-full">
-            <CollapaseButton />
-            <Breadcrumb />
+            <ProductionItem />
           </div>
           <div class="flex-y-center gap-1 h-full p-x-xl">
-            <Search />
-            <Notices />
-            <FullScreen />
             <DarkModeSwitch />
-            <LangsSwitch />
-            <Setting />
             <UserCenter />
+          </div>
+        </div>
+        <n-divider style="margin-top: 0; margin-bottom: 0" />
+        <div v-if="!appStore.contentFullScreen" class="h-60px flex-y-center justify-between">
+          <div class="flex-y-center h-full">
+            <CollapaseButton />
+            <Breadcrumb />
           </div>
         </div>
         <TabBar v-if="appStore.showTabs" class="h-45px" />
@@ -67,9 +65,9 @@ const appStore = useAppStore()
       <div
         class="flex-1 p-10px flex flex-col"
         :class="{
-          'p-t-121px': appStore.showTabs,
+          'p-t-181px': appStore.showTabs,
           'p-b-56px': appStore.showFooter && !appStore.contentFullScreen,
-          'p-t-76px': !appStore.showTabs,
+          'p-t-136px': !appStore.showTabs,
           'p-t-61px': appStore.contentFullScreen,
         }"
       >

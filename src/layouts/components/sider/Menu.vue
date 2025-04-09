@@ -17,6 +17,7 @@ watch(
 </script>
 
 <template>
+  <!--  左侧菜单配置 -->
   <n-menu
     ref="menuInstRef"
     :collapsed="appStore.collapsed"
@@ -24,5 +25,6 @@ watch(
     :collapsed-width="64"
     :options="routeStore.menus"
     :value="routeStore.activeMenu"
+    class="custom-menu"
   />
 </template>

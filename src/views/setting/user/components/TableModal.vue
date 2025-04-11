@@ -29,7 +29,7 @@ const formDefault: Entity.User = {
   email: '',
   nickName: '',
   phone: '',
-  roles: [],
+  roleIds: [],
   status: 1,
   userId: '',
   remark: '',
@@ -51,10 +51,10 @@ async function openModal(type: ModalType = 'add', data: any) {
   emit('open')
   modalType.value = type
   showModal()
-  await getUserDetail(data.id)
   const handlers = {
     async add() {
       formModel.value = { ...formDefault }
+      await getUserDetail(0)
     },
     async view() {
       if (!data)
@@ -65,6 +65,7 @@ async function openModal(type: ModalType = 'add', data: any) {
       if (!data)
         return
       formModel.value = { ...data }
+      await getUserDetail(data.id)
     },
   }
   await handlers[type]()
@@ -97,7 +98,6 @@ async function submitModal() {
     async edit() {
       return new Promise((resolve) => {
         fetchUserEdit(formModel.value).then((res: any) => {
-          console.log(formModel.value)
           if (res.isSuccess) {
             window.$message.success('编辑成功')
             resolve(true)
@@ -128,13 +128,8 @@ const treeOptions = ref<CascaderNode[]>([])
 async function getUserDetail(id: number) {
   const { data } = await fetchUserDetail(id)
   treeOptions.value = transformToCascader(data.roles)
-  console.log(treeOptions.value)
+  formModel.value.roleIds = data.roleIds
 }
-//
-// function handleSelect(selectedKey: string, selectedOptions: CascaderNode[]) {
-//   const roleNode = selectedOptions[selectedOptions.length - 1]
-//   console.log('选中的角色数据:', roleNode.data)
-// }
 </script>
 
 <template>
@@ -171,7 +166,7 @@ async function getUserDetail(id: number) {
         </n-form-item-grid-item>
         <n-form-item-grid-item :span="2" label="角色" path="roleName">
           <n-cascader
-            v-model:value="formModel.roles"
+            v-model:value="formModel.roleIds"
             :options="treeOptions"
             check-strategy="child"
             :show-path="false"
@@ -186,7 +181,7 @@ async function getUserDetail(id: number) {
         <n-form-item-grid-item :span="1" label="用户状态" path="status">
           <n-switch
             v-model:value="formModel.status"
-            :checked-value="1" :unchecked-value="0"
+            :checked-value="1" :unchecked-value="2"
           >
             <template #checked>
               启用

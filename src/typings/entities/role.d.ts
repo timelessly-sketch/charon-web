@@ -10,7 +10,7 @@ export namespace Entity {
 
 export interface CascaderNode {
   label: string
-  value: string
+  value: string | number
   children?: CascaderNode[]
   selectable?: boolean // 新增字段：控制是否可选
   data?: Entity.AuthRole

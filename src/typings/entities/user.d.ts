@@ -18,11 +18,10 @@ namespace Entity {
     /* 用户电话 */
     phone?: string
     /** 用户角色类型 */
-    roles?: Entity.RoleType[]
+    roleIds?: number[]
     /** 用户状态 */
     status?: 0 | 1
     /** 备注 */
     remark?: string
   }
-
 }

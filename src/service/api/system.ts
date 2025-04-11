@@ -11,7 +11,7 @@ export function fetchUserPage() {
 }
 
 export function fetchUserList(params: { page: number, size: number }) {
-  return request.Get<Service.ResponseResult<Entity.User[]>>('/system/userList', { params })
+  return request.Get<Service.ResponseResult<any>>('/system/userList', { params })
 }
 
 export function fetchUserEdit(params: Entity.User) {

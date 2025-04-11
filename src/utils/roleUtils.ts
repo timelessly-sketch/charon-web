@@ -11,22 +11,22 @@ export function transformToCascader(roles: Entity.AuthRole[]): CascaderNode[] {
   roles.forEach((role) => {
     const platformCode = role.platformCode || 'unknown'
 
-    // 处理平台节点
+    // 处理平台节点（value 为字符串）
     if (!platformMap.has(platformCode)) {
       platformMap.set(platformCode, {
         label: platformCode.toUpperCase(),
-        value: `platform_${platformCode}`, // 平台节点保持原标识方式
+        value: `platform_${platformCode}`, // 平台节点 value 是字符串
         children: [],
         selectable: false,
         isPlatform: true,
       })
     }
 
-    // 处理角色节点
+    // 处理角色节点（value 为数字）
     const platformNode = platformMap.get(platformCode)!
     platformNode.children!.push({
       label: role.roleKey || '未命名角色',
-      value: String(role.id!), // 强制转换为字符串，直接使用 id（关键修改）
+      value: role.id!, // 角色节点 value 是 number
       data: role,
       selectable: true,
     })

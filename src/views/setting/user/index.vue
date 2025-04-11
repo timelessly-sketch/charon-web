@@ -127,7 +127,7 @@ async function getUserList() {
     ...filterEmptyParams(model.value),
   }
   await fetchUserList(params).then((res: any) => {
-    listData.value = res.data.records
+    listData.value = res.data.records || []
     count.value = res.data.total
     endLoading()
   })

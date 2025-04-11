@@ -20,7 +20,7 @@ function handleClickMenu(key: string) {
   console.log('选中菜单:', key)
   showPopover.value = false
 }
-// 计算动态宽度
+
 function calculateWidth() {
   const screenWidth = window.innerWidth
   gridWidth.value = Math.floor((screenWidth - 240) * 0.9)

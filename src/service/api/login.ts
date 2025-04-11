@@ -1,7 +1,7 @@
 import { request } from '../http'
 
 interface ILogin {
-  userName: string
+  nickname: string
   password: string
 }
 

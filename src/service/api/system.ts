@@ -9,11 +9,18 @@ export function fetchAllRoutes() {
 export function fetchUserPage() {
   return request.Get<Service.ResponseResult<Entity.User[]>>('/userPage')
 }
-// 获取所有角色列表
-export function fetchRoleList() {
-  return request.Get<Service.ResponseResult<Entity.Role[]>>('/role/list')
+
+export function fetchUserList(params: { page: number, size: number }) {
+  return request.Get<Service.ResponseResult<Entity.User[]>>('/system/userList', { params })
 }
 
+export function fetchUserEdit(params: Entity.User) {
+  return request.Post<Service.ResponseResult<any>>('system/userEdit', params)
+}
+
+export function fetchUserDetail(id: number) {
+  return request.Get<Service.ResponseResult<any>>(`/system/userDetail/${id}`)
+}
 /**
  * 请求获取字典列表
  *

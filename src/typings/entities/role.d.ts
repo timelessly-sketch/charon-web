@@ -1,13 +1,18 @@
-/// <reference path="../global.d.ts"/>
-
 /* 角色数据库表字段 */
-namespace Entity {
-  type RoleType = 'super' | 'admin' | 'user'
-
-  interface Role {
-    /** 用户id */
+export namespace Entity {
+  export interface AuthRole {
     id?: number
-    /** 用户名 */
-    role?: RoleType
+    roleName?: string
+    roleKey?: string
+    platformCode?: string
   }
+}
+
+export interface CascaderNode {
+  label: string
+  value: string
+  children?: CascaderNode[]
+  selectable?: boolean // 新增字段：控制是否可选
+  data?: Entity.AuthRole
+  isPlatform?: boolean
 }

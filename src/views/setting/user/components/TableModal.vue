@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { useBoolean } from '@/hooks'
-import { fetchRoleList } from '@/service'
+import { fetchUserDetail, fetchUserEdit } from '@/service'
+import { transformToCascader } from '@/utils/roleUtils'
+import type { CascaderNode } from '@/typings/entities/role'
 
 interface Props {
   modalName?: string
@@ -13,6 +15,7 @@ const {
 const emit = defineEmits<{
   open: []
   close: []
+  update: [user: Entity.User]
 }>()
 
 const { bool: modalVisible, setTrue: showModal, setFalse: hiddenModal } = useBoolean(false)
@@ -20,11 +23,16 @@ const { bool: modalVisible, setTrue: showModal, setFalse: hiddenModal } = useBoo
 const { bool: submitLoading, setTrue: startLoading, setFalse: endLoading } = useBoolean(false)
 
 const formDefault: Entity.User = {
+  id: 0,
   userName: '',
+  name: '',
   email: '',
-  tel: '',
-  role: [],
+  nickName: '',
+  phone: '',
+  roles: [],
   status: 1,
+  userId: '',
+  remark: '',
 }
 const formModel = ref<Entity.User>({ ...formDefault })
 
@@ -43,7 +51,7 @@ async function openModal(type: ModalType = 'add', data: any) {
   emit('open')
   modalType.value = type
   showModal()
-  getRoleList()
+  await getUserDetail(data.id)
   const handlers = {
     async add() {
       formModel.value = { ...formDefault }
@@ -77,18 +85,25 @@ async function submitModal() {
   const handlers = {
     async add() {
       return new Promise((resolve) => {
-        setTimeout(() => {
-          window.$message.success('模拟新增成功')
-          resolve(true)
-        }, 2000)
+        fetchUserEdit(formModel.value).then((res: any) => {
+          if (res.isSuccess) {
+            window.$message.success('新增成功')
+            resolve(true)
+          }
+          resolve(false)
+        })
       })
     },
     async edit() {
       return new Promise((resolve) => {
-        setTimeout(() => {
-          window.$message.success('模拟编辑成功')
-          resolve(true)
-        }, 2000)
+        fetchUserEdit(formModel.value).then((res: any) => {
+          console.log(formModel.value)
+          if (res.isSuccess) {
+            window.$message.success('编辑成功')
+            resolve(true)
+          }
+          resolve(false)
+        })
       })
     },
     async view() {
@@ -98,21 +113,28 @@ async function submitModal() {
   await formRef.value?.validate()
   startLoading()
   await handlers[modalType.value]() && closeModal()
+  emit('update', formModel.value)
+  endLoading()
 }
 
 const rules = {
-  userName: {
-    required: true,
-    message: '请输入用户名',
-    trigger: 'blur',
-  },
+  nickName: { required: true, message: '请输入昵称', trigger: 'blur' },
+  userName: { required: true, message: '请输入用户名', trigger: 'blur' },
+  name: { required: true, message: '请输入用户姓名', trigger: 'blur' },
+  userId: { required: true, message: '请输入用户ID', trigger: 'blur' },
 }
 
-const options = ref()
-async function getRoleList() {
-  const { data } = await fetchRoleList()
-  options.value = data
+const treeOptions = ref<CascaderNode[]>([])
+async function getUserDetail(id: number) {
+  const { data } = await fetchUserDetail(id)
+  treeOptions.value = transformToCascader(data.roles)
+  console.log(treeOptions.value)
 }
+//
+// function handleSelect(selectedKey: string, selectedOptions: CascaderNode[]) {
+//   const roleNode = selectedOptions[selectedOptions.length - 1]
+//   console.log('选中的角色数据:', roleNode.data)
+// }
 </script>
 
 <template>
@@ -129,33 +151,33 @@ async function getRoleList() {
   >
     <n-form ref="formRef" :rules="rules" label-placement="left" :model="formModel" :label-width="100" :disabled="modalType === 'view'">
       <n-grid :cols="2" :x-gap="18">
+        <n-form-item-grid-item :span="1" label="昵称" path="nickName">
+          <n-input v-model:value="formModel.nickName" />
+        </n-form-item-grid-item>
         <n-form-item-grid-item :span="1" label="用户名" path="userName">
           <n-input v-model:value="formModel.userName" />
         </n-form-item-grid-item>
-        <n-form-item-grid-item :span="1" label="性别" path="gender">
-          <n-radio-group v-model:value="formModel.gender">
-            <n-space>
-              <n-radio :value="1">
-                男
-              </n-radio>
-              <n-radio :value="0">
-                女
-              </n-radio>
-            </n-space>
-          </n-radio-group>
+        <n-form-item-grid-item :span="1" label="用户姓名" path="name">
+          <n-input v-model:value="formModel.name" />
+        </n-form-item-grid-item>
+        <n-form-item-grid-item :span="1" label="用户ID" path="userId">
+          <n-input v-model:value="formModel.userId" />
         </n-form-item-grid-item>
         <n-form-item-grid-item :span="1" label="邮箱" path="email">
           <n-input v-model:value="formModel.email" />
         </n-form-item-grid-item>
-        <n-form-item-grid-item :span="1" label="联系方式" path="tel">
-          <n-input v-model:value="formModel.tel" />
+        <n-form-item-grid-item :span="1" label="电话" path="phone">
+          <n-input v-model:value="formModel.phone" />
         </n-form-item-grid-item>
-        <n-form-item-grid-item :span="2" label="角色" path="role">
-          <n-select
-            v-model:value="formModel.role" multiple filterable
-            label-field="role"
-            value-field="id"
-            :options="options"
+        <n-form-item-grid-item :span="2" label="角色" path="roleName">
+          <n-cascader
+            v-model:value="formModel.roles"
+            :options="treeOptions"
+            check-strategy="child"
+            :show-path="false"
+            clearable
+            multiple
+            placeholder="请选择角色"
           />
         </n-form-item-grid-item>
         <n-form-item-grid-item :span="2" label="备注" path="remark">

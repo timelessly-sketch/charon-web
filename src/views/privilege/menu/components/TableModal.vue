@@ -162,9 +162,6 @@ const rules = {
 }
 
 const options = ref()
-async function getRoleList() {
-  options.value = data
-}
 </script>
 
 <template>
@@ -263,18 +260,6 @@ async function getRoleList() {
             <HelpInfo message="当前路由不在左侧菜单显示，但需要高亮某个菜单" />
           </template>
           <n-input v-model:value="formModel.activeMenu" />
-        </n-form-item-grid-item>
-        <n-form-item-grid-item :span="2" path="roles">
-          <template #label>
-            访问角色
-            <HelpInfo message="不填写则表示所有角色都可以访问" />
-          </template>
-          <n-select
-            v-model:value="formModel.roles" multiple filterable
-            label-field="role"
-            value-field="id"
-            :options="options"
-          />
         </n-form-item-grid-item>
       </n-grid>
     </n-form>

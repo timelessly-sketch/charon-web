@@ -2,19 +2,15 @@
 import { NButton, NGi, NGrid, NIcon, NPopover } from 'naive-ui'
 import { BagOutline as BagOutlineIcon } from '@vicons/ionicons5'
 import { ref } from 'vue'
+import { fetchPlatformOptions } from '@/service'
+import { useBoolean } from '@/hooks'
+
+const { bool: loading, setTrue: startLoading, setFalse: endLoading } = useBoolean(false)
 
 const name = '产品列表'
 const showPopover = ref(false)
 const gridWidth = ref(1000)
-
-const menuOptions = [
-  { label: '产品分类1', key: 'cat1', color: 'light-green' },
-  { label: '产品分类2', key: 'cat2', color: 'green' },
-  { label: '产品分类3', key: 'cat3', color: 'light-green' },
-  { label: '产品分类4', key: 'cat4', color: 'green' },
-  { label: '产品分类5', key: 'cat5', color: 'light-green' },
-  { label: '产品分类6', key: 'cat6', color: 'green' },
-]
+const platforms = ref<any[]>([])
 
 function handleClickMenu(key: string) {
   console.log('选中菜单:', key)
@@ -25,11 +21,24 @@ function calculateWidth() {
   const screenWidth = window.innerWidth
   gridWidth.value = Math.floor((screenWidth - 240) * 0.9)
 }
+async function platformOptions() {
+  startLoading()
+  const res = await fetchPlatformOptions()
+  platforms.value = res.data.records.map((item: any, index: number) => ({
+    label: item.platformName,
+    key: item.platformCode,
+    color: index % 2 === 0 ? 'light-green' : 'green',
+    icon: BagOutlineIcon,
+    serverUrl: item.serverUrl,
+  }))
+  endLoading()
+}
 
 // 添加窗口resize监听
 onMounted(() => {
   calculateWidth()
   window.addEventListener('resize', calculateWidth)
+  platformOptions()
 })
 
 // 移除监听
@@ -43,11 +52,12 @@ onUnmounted(() => {
     placement="bottom-start"
     trigger="click"
     :show="showPopover"
+    :loading="loading"
     @update:show="(val) => (showPopover = val)"
   >
     <NGrid :cols="5" :x-gap="16" :y-gap="16" :style="{ padding: '10px', width: `${gridWidth}px` }">
       <NGi
-        v-for="item in menuOptions"
+        v-for="item in platforms"
         :key="item.key"
         :class="item.color"
         @click="handleClickMenu(item.key)"

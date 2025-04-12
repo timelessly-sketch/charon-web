@@ -132,21 +132,24 @@ const rules = {
     }"
   >
     <n-form ref="formRef" :rules="rules" label-placement="left" :model="formModel" :label-width="100" :disabled="modalType === 'view'">
-      <n-grid :cols="1" :x-gap="18">
-        <n-form-item-grid-item :span="1" label="平台名称" path="platformName">
+      <n-grid :cols="2" :x-gap="18">
+        <n-form-item-grid-item :span="2" label="平台名称" path="platformName">
           <n-input v-model:value="formModel.platformName" />
         </n-form-item-grid-item>
-        <n-form-item-grid-item :span="1" label="平台编码" path="platformCode">
+        <n-form-item-grid-item :span="2" label="平台编码" path="platformCode">
           <n-input v-model:value="formModel.platformCode" />
         </n-form-item-grid-item>
-        <n-form-item-grid-item :span="1" label="平台地址" path="serverUrl">
+        <n-form-item-grid-item :span="2" label="平台地址" path="serverUrl">
           <n-input v-model:value="formModel.serverUrl" />
         </n-form-item-grid-item>
-        <n-form-item-grid-item :span="1" label="默认路由" path="defaultRoute">
+        <n-form-item-grid-item :span="2" label="默认路由" path="defaultRoute">
           <n-input v-model:value="formModel.defaultRoute" />
         </n-form-item-grid-item>
         <n-form-item-grid-item :span="1" label="平台排序" path="platformSort">
           <n-input-number v-model:value="formModel.platformSort" clearable :precision="0" :min="1" :step="1" />
+        </n-form-item-grid-item>
+        <n-form-item-grid-item :span="1" label="图标" path="icon">
+          <icon-select v-model:value="formModel.icon" :disabled="modalType === 'view'" />
         </n-form-item-grid-item>
         <n-form-item-grid-item :span="1" label="平台状态" path="status">
           <n-switch

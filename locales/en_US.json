@@ -130,7 +130,8 @@
     "accountSetting": "User settings",
     "cascader": "Administrative region selection",
     "dict": "Dictionary example",
-    "platFormSetting": "platform setting"
+    "platFormSetting": "platform setting",
+    "privilege": "privilege manage"
   },
   "http": {
     "400": "Syntax error in the request",

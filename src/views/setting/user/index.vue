@@ -2,7 +2,7 @@
 import type { DataTableColumns, FormInst } from 'naive-ui'
 import { NButton, NPopconfirm, NSpace, NTag } from 'naive-ui'
 import { useBoolean } from '@/hooks'
-import { fetchUserList } from '@/service'
+import { fetchResetPass, fetchUserList } from '@/service'
 import TableModal from './components/TableModal.vue'
 import { filterEmptyParams } from '@/utils/params'
 
@@ -41,7 +41,7 @@ const columns: DataTableColumns<Entity.User> = [
     key: 'nickName',
   },
   {
-    title: '用户名',
+    title: '英文名',
     align: 'center',
     key: 'userName',
   },
@@ -97,7 +97,7 @@ const columns: DataTableColumns<Entity.User> = [
           >
             编辑
           </NButton>
-          <NPopconfirm onPositiveClick={() => resetPassword(row.id!)}>
+          <NPopconfirm onPositiveClick={() => resetPassword(row.userName!)}>
             {{
               default: () => '重置密码后用户名与密码一致。',
               trigger: () => <NButton size="small" type="warning">重置密码</NButton>,
@@ -133,12 +133,12 @@ async function getUserList() {
   })
 }
 
-async function resetPassword(id: number) {
+async function resetPassword(username: string) {
   startLoading()
-  // const { isSuccess } = await fetchResetPass(id)
-  // if (isSuccess) {
-  //   window.$message?.success('重置成功')
-  // }
+  const { isSuccess } = await fetchResetPass(username)
+  if (isSuccess) {
+    window.$message?.success('重置成功')
+  }
   endLoading()
 }
 
@@ -159,7 +159,7 @@ function changePage(currentPage: number, currentPageSize: number) {
       <n-card>
         <n-form ref="formRef" :model="model" label-placement="left" inline :show-feedback="false">
           <n-flex>
-            <n-form-item label="LDAP用户名" path="username">
+            <n-form-item label="用户名" path="username">
               <n-input v-model:value="model.username" placeholder="请输入" />
             </n-form-item>
             <n-form-item label="用户姓名" path="name">

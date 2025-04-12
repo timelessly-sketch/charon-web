@@ -160,6 +160,7 @@
     "about": "关于",
     "cascader": "省市区联动",
     "dict": "字典示例",
-    "userSetting": "用户设置"
+    "userSetting": "用户设置",
+    "platFormSetting": "平台设置"
   }
 }

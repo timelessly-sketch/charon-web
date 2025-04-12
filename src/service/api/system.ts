@@ -11,15 +11,27 @@ export function fetchUserPage() {
 }
 
 export function fetchUserList(params: { page: number, size: number }) {
-  return request.Get<Service.ResponseResult<any>>('/system/userList', { params })
+  return request.Get<Service.ResponseResult<any>>('/system/user/list', { params })
 }
 
 export function fetchUserEdit(params: Entity.User) {
-  return request.Post<Service.ResponseResult<any>>('system/userEdit', params)
+  return request.Post<Service.ResponseResult<any>>('system/user/edit', params)
 }
 
 export function fetchUserDetail(id: number) {
-  return request.Get<Service.ResponseResult<any>>(`/system/userDetail/${id}`)
+  return request.Get<Service.ResponseResult<any>>(`/system/user/detail/${id}`)
+}
+
+export function fetchResetPass(username: string) {
+  return request.Post<Service.ResponseResult<any>>(`/system/user/reset`, { username })
+}
+
+export function fetchPlatFormList(params: { page: number, size: number }) {
+  return request.Get<Service.ResponseResult<any>>(`/system/platform/list`, { params })
+}
+
+export function fetchPlatformEdit(params: Entity.Platform) {
+  return request.Post<Service.ResponseResult<any>>(`/system/platform/edit`, params)
 }
 /**
  * 请求获取字典列表

@@ -131,24 +131,27 @@ async function getMenuList() {
   if (!currentPlatform.value.platformCode) {
     return
   }
-  await loadMenuData(currentPlatform.value.platformCode)
+  await loadMenuData()
   endLoading()
 }
 
 async function handlePlatformClick(platform: Entity.Platform) {
   currentPlatform.value = platform
   if (platform.platformCode) {
-    await loadMenuData(platform.platformCode)
+    await loadMenuData()
   }
   else {
     window.$message.warning('该平台未配置编码')
   }
 }
 
-async function loadMenuData(platformCode: string) {
+async function loadMenuData() {
   startLoading()
-
-  await fetchMenuList(platformCode).then((res: any) => {
+  if (!currentPlatform.value?.platformCode) {
+    window.$message.warning('请先选择有效平台')
+    return
+  }
+  await fetchMenuList(currentPlatform.value.platformCode).then((res: any) => {
     tableData.value = arrayToTree(res.data.records || [])
   })
   endLoading()
@@ -162,7 +165,7 @@ async function handlePositiveClick() {
 
 <template>
   <n-flex>
-    <n-card class="w-70">
+    <n-card class="w-60">
       <n-list hoverable clickable>
         <n-list-item
           v-for="platform in platformData"
@@ -191,7 +194,7 @@ async function handlePositiveClick() {
     <NSpace vertical class="flex-1">
       <n-card class="flex-1">
         <template #header>
-          <NButton type="primary" @click="tableModalRef.openModal('add')">
+          <NButton type="primary" @click="tableModalRef.openModal('add', null, currentPlatform?.platformCode)">
             <template #icon>
               <icon-park-outline-add-one />
             </template>
@@ -228,7 +231,7 @@ async function handlePositiveClick() {
           :loading="loading"
           size="small"
         />
-        <TableModal ref="tableModalRef" :all-routes="tableData" modal-name="菜单" />
+        <TableModal ref="tableModalRef" :all-routes="tableData" modal-name="菜单" @update="loadMenuData" />
       </n-card>
     </NSpace>
   </n-flex>

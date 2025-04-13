@@ -27,6 +27,7 @@ declare namespace AppRoute {
     pinTab?: boolean
     /** 当前路由在左侧菜单是目录还是页面,不设置默认为page */
     menuType?: MenuType
+    platformCode?: string
   }
 
   type MetaKeys = keyof RouteMeta

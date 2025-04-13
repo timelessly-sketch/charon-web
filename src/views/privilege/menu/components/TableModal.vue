@@ -5,6 +5,7 @@ import type {
 import HelpInfo from '@/components/common/HelpInfo.vue'
 import { Regex } from '@/constants'
 import { useBoolean } from '@/hooks'
+import { fetchMenuEdit } from '@/service/api/privilege'
 
 interface Props {
   modalName?: string
@@ -19,6 +20,7 @@ const {
 const emit = defineEmits<{
   open: []
   close: []
+  update: [router: AppRoute.RowRoute]
 }>()
 
 const { bool: modalVisible, setTrue: showModal, setFalse: hiddenModal } = useBoolean(false)
@@ -27,7 +29,7 @@ const { bool: submitLoading, setTrue: startLoading, setFalse: endLoading } = use
 const formDefault: AppRoute.RowRoute = {
   name: '',
   path: '',
-  id: -1,
+  id: 0,
   pid: null,
   title: '',
   requiresAuth: true,
@@ -36,6 +38,7 @@ const formDefault: AppRoute.RowRoute = {
   withoutTab: true,
   pinTab: false,
   menuType: 'page',
+  platformCode: '',
 }
 const formModel = ref<AppRoute.RowRoute>({ ...formDefault })
 
@@ -50,14 +53,14 @@ const modalTitle = computed(() => {
   return `${titleMap[modalType.value]}${modalName}`
 })
 
-async function openModal(type: ModalType = 'add', data: AppRoute.RowRoute) {
+async function openModal(type: ModalType = 'add', data: AppRoute.RowRoute, platformCode: string) {
   emit('open')
   modalType.value = type
-  getRoleList()
   showModal()
   const handlers = {
     async add() {
       formModel.value = { ...formDefault }
+      formModel.value.platformCode = platformCode
     },
     async view() {
       if (!data)
@@ -88,18 +91,24 @@ async function submitModal() {
   const handlers = {
     async add() {
       return new Promise((resolve) => {
-        setTimeout(() => {
-          window.$message.success('模拟新增成功')
-          resolve(true)
-        }, 2000)
+        fetchMenuEdit(formModel.value).then((res: any) => {
+          if (res.isSuccess) {
+            window.$message.success('新增成功')
+            resolve(true)
+          }
+          resolve(false)
+        })
       })
     },
     async edit() {
       return new Promise((resolve) => {
-        setTimeout(() => {
-          window.$message.success('模拟编辑成功')
-          resolve(true)
-        }, 2000)
+        fetchMenuEdit(formModel.value).then((res: any) => {
+          if (res.isSuccess) {
+            window.$message.success('编辑成功')
+            resolve(true)
+          }
+          resolve(false)
+        })
       })
     },
     async view() {
@@ -109,6 +118,8 @@ async function submitModal() {
   await formRef.value?.validate()
   startLoading()
   await handlers[modalType.value]() && closeModal()
+  emit('update', formModel.value)
+  endLoading()
 }
 
 const dirTreeOptions = computed(() => {
@@ -160,8 +171,6 @@ const rules = {
     trigger: 'blur',
   },
 }
-
-const options = ref()
 </script>
 
 <template>
@@ -229,9 +238,6 @@ const options = ref()
             <HelpInfo message="填写后，点击菜单将跳转到该地址，组件路径任意填写" />
           </template>
           <n-input v-model:value="formModel.href" placeholder="Eg: https://example.com" />
-        </n-form-item-grid-item>
-        <n-form-item-grid-item :span="1" label="登录访问" path="requiresAuth">
-          <n-switch v-model:value="formModel.requiresAuth" />
         </n-form-item-grid-item>
         <n-form-item-grid-item
           v-if="formModel.menuType === 'page'" :span="1" label="页面缓存"

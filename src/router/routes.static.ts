@@ -54,6 +54,16 @@ export const staticRoutes: AppRoute.RowRoute[] = [
     pid: 34,
   },
   {
+    name: 'rolePrivilege',
+    path: '/privilege/role',
+    title: '角色设置',
+    requiresAuth: true,
+    icon: 'icon-park-outline:every-user',
+    componentPath: '/privilege/role/index.vue',
+    id: 36,
+    pid: 34,
+  },
+  {
     name: 'setting',
     path: '/setting',
     title: '系统设置',

@@ -1,12 +1,10 @@
-import type { CascaderNode, Entity } from '@/typings/entities/role'
-
 /**
  * 将角色列表转换为 Cascader 需要的层级结构
  * @param roles 角色列表
  * @returns 级联数据结构
  */
-export function transformToCascader(roles: Entity.AuthRole[]): CascaderNode[] {
-  const platformMap = new Map<string, CascaderNode>()
+export function transformToCascader(roles: Entity.AuthRole[]): Entity.CascaderNode[] {
+  const platformMap = new Map<string, Entity.CascaderNode>()
 
   roles.forEach((role) => {
     const platformCode = role.platformCode || 'unknown'

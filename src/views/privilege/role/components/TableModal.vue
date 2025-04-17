@@ -4,7 +4,14 @@ import type {
 } from 'naive-ui'
 import { Regex } from '@/constants'
 import { useBoolean } from '@/hooks'
-import { fetchRoleEdit } from '@/service/api/privilege'
+import { Tree } from '@/utils/tree'
+import { fetchRoleDetail, fetchRoleEdit } from '@/service/api/privilege'
+
+interface TreeOption {
+  label: string
+  key: number
+  children?: TreeOption[]
+}
 
 interface Props {
   modalName?: string
@@ -31,6 +38,7 @@ const formDefault: Entity.AuthRole = {
   roleSort: 0,
   status: 0,
   platformCode: '',
+  menuIds: [],
 }
 const formModel = ref<Entity.AuthRole>({ ...formDefault })
 
@@ -63,6 +71,7 @@ async function openModal(type: ModalType = 'add', data: Entity.AuthRole, platfor
       if (!data)
         return
       formModel.value = { ...data }
+      await getRoleDetail(data.id)
     },
   }
   await handlers[type]()
@@ -94,6 +103,7 @@ async function submitModal() {
     },
     async edit() {
       return new Promise((resolve) => {
+        console.log(formModel.value)
         fetchRoleEdit(formModel.value).then((res: any) => {
           if (res.isSuccess) {
             window.$message.success('编辑成功')
@@ -145,6 +155,22 @@ const rules = {
     trigger: 'blur',
   },
 }
+const menuTreeData = ref<TreeOption[]>([])
+async function getRoleDetail(id: number) {
+  const { data } = await fetchRoleDetail(id)
+  if (data?.menuList) {
+    menuTreeData.value = Tree(data.menuList).map(formatMenuForTree)
+    formModel.value.menuIds = data.menuIds
+  }
+}
+
+function formatMenuForTree(menu: Entity.MenuItem): TreeOption {
+  return {
+    label: menu.title,
+    key: menu.id,
+    children: menu.children?.map(formatMenuForTree),
+  }
+}
 </script>
 
 <template>
@@ -183,6 +209,20 @@ const rules = {
               禁用
             </template>
           </n-switch>
+        </n-form-item-grid-item>
+        <n-form-item-grid-item :span="2" label="菜单权限">
+          <n-tree
+            :data="menuTreeData"
+            :checked-keys="formModel.menuIds"
+            checkable
+            selectable
+            :block-line="true"
+            cascade
+            check-strategy="child"
+            :virtual-scroll="true"
+            style="max-height: 300px; overflow: auto"
+            @update:checked-keys="(keys: number[]) => formModel.menuIds = keys"
+          />
         </n-form-item-grid-item>
       </n-grid>
     </n-form>

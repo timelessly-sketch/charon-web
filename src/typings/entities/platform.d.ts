@@ -9,4 +9,10 @@ namespace Entity {
     status?: number
     platformSort?: number
   }
+  interface MenuItem {
+    id: number
+    pid: number
+    title: string
+    children?: MenuItem[]
+  }
 }

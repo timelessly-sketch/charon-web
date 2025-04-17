@@ -7,6 +7,8 @@ namespace Entity {
     roleSort?: number
     status?: number
     createdAt?: Date
+    menuIds?: number[]
+    menuList?: AppRoute.RowRoute[]
   }
   interface CascaderNode {
     label: string

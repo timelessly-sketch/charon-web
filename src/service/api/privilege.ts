@@ -27,3 +27,7 @@ export function fetchRoleEdit(params: Entity.AuthRole) {
     params,
   )
 }
+
+export function fetchRoleDetail(id: number) {
+  return request.Get<Service.ResponseResult<any>>(`/privilege/role/detail/${id}`)
+}

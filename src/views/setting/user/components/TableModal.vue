@@ -2,7 +2,6 @@
 import { useBoolean } from '@/hooks'
 import { fetchUserDetail, fetchUserEdit } from '@/service'
 import { transformToCascader } from '@/utils/roleUtils'
-import type { CascaderNode } from '@/typings/entities/role'
 
 interface Props {
   modalName?: string
@@ -124,7 +123,7 @@ const rules = {
   userId: { required: true, message: '请输入用户ID', trigger: 'blur' },
 }
 
-const treeOptions = ref<CascaderNode[]>([])
+const treeOptions = ref<Entity.CascaderNode[]>([])
 async function getUserDetail(id: number) {
   const { data } = await fetchUserDetail(id)
   treeOptions.value = transformToCascader(data.roles)

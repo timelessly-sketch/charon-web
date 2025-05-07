@@ -11,7 +11,6 @@ import Get from './components/Get.vue'
 import NoToken from './components/NoToken.vue'
 import Post from './components/Post.vue'
 import Put from './components/Put.vue'
-import RefreshToken from './components/RefreshToken.vue'
 import TokenExpiration from './components/TokenExpiration.vue'
 import Transform from './components/Transform.vue'
 import UseRequest from './components/UseRequest.vue'
@@ -38,7 +37,6 @@ function handleUpdate(data: any) {
           <Transform @update="handleUpdate" />
           <DownLoad @update="handleUpdate" />
           <DownLoadWithProgress class="col-span-2" @update="handleUpdate" />
-          <RefreshToken @update="handleUpdate" />
           <FailedRequest @update="handleUpdate" />
           <FailedResponse @update="handleUpdate" />
           <FailedResponseWithoutTip @update="handleUpdate" />

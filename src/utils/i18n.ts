@@ -13,8 +13,4 @@ export const naiveI18nOptions: Record<App.lang, { locale: NLocale | null, dateLo
     locale: zhCN,
     dateLocale: dateZhCN,
   },
-  enUS: {
-    locale: null,
-    dateLocale: null,
-  },
 }

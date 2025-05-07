@@ -7,7 +7,6 @@ import {
   Logo,
   Menu,
   ProductionItem,
-  TabBar,
   UserCenter,
 } from './components'
 
@@ -58,7 +57,7 @@ const appStore = useAppStore()
             <Breadcrumb />
           </div>
         </div>
-        <TabBar v-if="appStore.showTabs" class="h-45px" />
+        <!--        <TabBar v-if="appStore.showTabs" class="h-45px" /> -->
       </n-layout-header>
       <!-- 121 = 16 + 45 + 60 45是面包屑高度 60是标签栏高度 -->
       <!-- 56 = 16 + 40 40是页脚高度 -->
@@ -67,7 +66,7 @@ const appStore = useAppStore()
         :class="{
           'p-t-181px': appStore.showTabs,
           'p-b-56px': appStore.showFooter && !appStore.contentFullScreen,
-          'p-t-136px': !appStore.showTabs,
+          'p-t-132px': !appStore.showTabs,
           'p-t-61px': appStore.contentFullScreen,
         }"
       >

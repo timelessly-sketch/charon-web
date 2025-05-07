@@ -46,7 +46,7 @@ declare namespace Storage {
 }
 
 declare namespace App {
-  type lang = 'zhCN' | 'enUS'
+  type lang = 'zhCN'
 }
 
 interface DictMap {

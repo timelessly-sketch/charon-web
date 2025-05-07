@@ -146,7 +146,7 @@ const rules = {
           <n-input v-model:value="formModel.defaultRoute" />
         </n-form-item-grid-item>
         <n-form-item-grid-item :span="1" label="平台排序" path="platformSort">
-          <n-input-number v-model:value="formModel.platformSort" clearable :precision="0" :min="1" :step="1" />
+          <n-input-number v-model:value="formModel.platformSort" clearable :precision="0" :min="0" :step="1" />
         </n-form-item-grid-item>
         <n-form-item-grid-item :span="1" label="图标" path="icon">
           <icon-select v-model:value="formModel.icon" :disabled="modalType === 'view'" />

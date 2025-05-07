@@ -2,9 +2,9 @@
 import type { DataTableColumns, FormInst } from 'naive-ui'
 import { NButton, NPopconfirm, NSpace, NTag } from 'naive-ui'
 import { useBoolean } from '@/hooks'
-import { fetchResetPass, fetchUserList } from '@/service'
 import TableModal from './components/TableModal.vue'
 import { filterEmptyParams } from '@/utils/params'
+import { fetchResetPass, fetchUserList } from '@/service'
 
 const { bool: loading, setTrue: startLoading, setFalse: endLoading } = useBoolean(false)
 const page = ref(1)

@@ -76,7 +76,7 @@ function setRedirect(routes: AppRoute.Route[]) {
         let target = visibleChilds[0]
 
         // Filter out pages with the order attribute
-        const orderChilds = visibleChilds.filter(child => child.meta.order)
+        const orderChilds = visibleChilds.filter(child => child.meta.order!)
 
         if (orderChilds.length > 0)
           target = min(orderChilds, i => i.meta.order!) as AppRoute.Route
@@ -108,15 +108,7 @@ function transformAuthRoutesToMenus(userRoutes: AppRoute.Route[]) {
     // Filter out side menus without permission
     .filter(i => hasPermission(i.meta.roles))
     //  Sort the menu according to the order size
-    .sort((a, b) => {
-      if (a.meta && a.meta.order && b.meta && b.meta.order)
-        return a.meta.order - b.meta.order
-      else if (a.meta && a.meta.order)
-        return -1
-      else if (b.meta && b.meta.order)
-        return 1
-      else return 0
-    })
+    .sort((a, b) => (a.meta?.order ?? 0) - (b.meta?.order ?? 0))
     // Convert to side menu data structure
     .map((item) => {
       const target: MenuOption = {

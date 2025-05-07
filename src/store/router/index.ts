@@ -43,19 +43,17 @@ export const useRouteStore = defineStore('route-store', {
 
         if (!userInfo || !userInfo.id) {
           const authStore = useAuthStore()
-          authStore.logout()
+          await authStore.logout()
           return
         }
 
         // Get user's route
-        const { data } = await fetchUserRoutes({
-          id: userInfo.id,
-        })
+        const { data } = await fetchUserRoutes()
 
-        if (!data)
+        if (!data.records)
           return
 
-        return data
+        return data.records
       }
       else {
         this.rowRoutes = staticRoutes
@@ -75,6 +73,7 @@ export const useRouteStore = defineStore('route-store', {
 
       // Generate actual route and insert
       const routes = createRoutes(rowRoutes)
+      console.log(routes,"路由信息")
       router.addRoute(routes)
 
       // Generate side menu

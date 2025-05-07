@@ -13,7 +13,13 @@ const gridWidth = ref(1000)
 const platforms = ref<any[]>([])
 
 function handleClickMenu(key: string) {
-  console.log('选中菜单:', key)
+  const selected = platforms.value.find(item => item.key === key)
+  if (selected) {
+    window.location.href = selected.defaultRoute
+  }
+  else {
+    console.warn('未找到对应平台项:', key)
+  }
   showPopover.value = false
 }
 
@@ -30,6 +36,7 @@ async function platformOptions() {
     color: index % 2 === 0 ? 'light-green' : 'green',
     icon: BagOutlineIcon,
     serverUrl: item.serverUrl,
+    defaultRoute: item.defaultRoute,
   }))
   endLoading()
 }

@@ -62,12 +62,6 @@ const columns: DataTableColumns<Entity.AuthRole> = [
         <NSpace justify="center">
           <NButton
             size="small"
-            onClick={() => tableModalRef.value.openModal('view', row)}
-          >
-            查看
-          </NButton>
-          <NButton
-            size="small"
             onClick={() => tableModalRef.value.openModal('edit', row)}
           >
             编辑

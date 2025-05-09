@@ -75,7 +75,7 @@ function setRedirect(routes: AppRoute.Route[]) {
         // Redirect page to the path of the first child element by default
         let target = visibleChilds[0]
 
-        // Filter out pages with the order attribute
+        // Filter out pages with the workflow attribute
         const orderChilds = visibleChilds.filter(child => child.meta.order!)
 
         if (orderChilds.length > 0)
@@ -107,7 +107,7 @@ function transformAuthRoutesToMenus(userRoutes: AppRoute.Route[]) {
   return userRoutes
     // Filter out side menus without permission
     .filter(i => hasPermission(i.meta.roles))
-    //  Sort the menu according to the order size
+    //  Sort the menu according to the workflow size
     .sort((a, b) => (a.meta?.order ?? 0) - (b.meta?.order ?? 0))
     // Convert to side menu data structure
     .map((item) => {

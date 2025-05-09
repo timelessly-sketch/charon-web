@@ -13,6 +13,6 @@ export function fetchLogin(data: ILogin) {
   return methodInstance
 }
 
-export function fetchUserRoutes() {
-  return request.Get <Service.ResponseResult<any>>('/auth/routes')
+export function fetchUserRoutes(params: { platformCode: any }) {
+  return request.Get <Service.ResponseResult<any>>(`/auth/routes`, { params })
 }

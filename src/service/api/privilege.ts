@@ -31,3 +31,17 @@ export function fetchRoleEdit(params: Entity.AuthRole) {
 export function fetchRoleDetail(id: number) {
   return request.Get<Service.ResponseResult<any>>(`/privilege/role/detail/${id}`)
 }
+
+export function fetchApiList(platformCode: string) {
+  return request.Get<Service.ResponseResult<AppRoute.Api[]>>(
+    '/privilege/api/list',
+    { params: { platformCode } },
+  )
+}
+
+export function fetchApiEdit(params: AppRoute.Api) {
+  return request.Post<Service.ResponseResult<any>>(
+    `/privilege/api/edit`,
+    params,
+  )
+}

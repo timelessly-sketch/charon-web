@@ -42,6 +42,8 @@ declare namespace Storage {
     loginAccount: any
     /* 存储当前语言 */
     lang: App.lang
+    /* 当前平台 */
+    platformCode: string
   }
 }
 

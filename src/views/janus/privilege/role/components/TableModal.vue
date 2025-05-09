@@ -5,7 +5,7 @@ import type {
 import { Regex } from '@/constants'
 import { useBoolean } from '@/hooks'
 import { Tree } from '@/utils/tree'
-import { fetchRoleDetail, fetchRoleEdit } from '@/service/api/privilege'
+import {fetchApiList, fetchMenuList, fetchRoleDetail, fetchRoleEdit} from '@/service/api/privilege'
 
 interface TreeOption {
   label: string
@@ -61,6 +61,7 @@ async function openModal(type: ModalType = 'add', data: Entity.AuthRole, platfor
     async add() {
       formModel.value = { ...formDefault }
       formModel.value.platformCode = platformCode
+      await addMenuTree(platformCode)
     },
     async view() {
       if (!data)
@@ -103,7 +104,6 @@ async function submitModal() {
     },
     async edit() {
       return new Promise((resolve) => {
-        console.log(formModel.value)
         fetchRoleEdit(formModel.value).then((res: any) => {
           if (res.isSuccess) {
             window.$message.success('编辑成功')
@@ -156,12 +156,48 @@ const rules = {
   },
 }
 const menuTreeData = ref<TreeOption[]>([])
+const apiTreeData = ref<TreeOption[]>([])
 async function getRoleDetail(id: number) {
+  startLoading()
   const { data } = await fetchRoleDetail(id)
+  // 处理菜单树
   if (data?.menuList) {
     menuTreeData.value = Tree(data.menuList).map(formatMenuForTree)
     formModel.value.menuIds = data.menuIds
   }
+  else {
+    menuTreeData.value = [] // 确保没有数据时清空
+    formModel.value.menuIds = []
+  }
+  // 处理接口树
+  if (data?.apiList) {
+    apiTreeData.value = Tree(data.apiList).map(formatMenuForTree)
+    formModel.value.apiIds = data.apiIds
+  }
+  else {
+    apiTreeData.value = [] // 显式设置为空数组
+    formModel.value.apiIds = []
+  }
+  endLoading()
+}
+
+async function addMenuTree(platformCode: string) {
+  startLoading()
+  apiTreeData.value = []
+  menuTreeData.value = []
+  formModel.value.menuIds = []
+  formModel.value.apiIds = []
+  await fetchMenuList(platformCode).then((res: any) => {
+    if (res.data.records) {
+      menuTreeData.value = Tree(res.data.records).map(formatMenuForTree)
+    }
+  })
+  await fetchApiList(platformCode).then((res: any) => {
+    if (res.data.records) {
+      apiTreeData.value = Tree(res.data.records).map(formatMenuForTree)
+    }
+  })
+  endLoading()
 }
 
 function formatMenuForTree(menu: Entity.MenuItem): TreeOption {
@@ -195,7 +231,7 @@ function formatMenuForTree(menu: Entity.MenuItem): TreeOption {
           <n-input v-model:value="formModel.roleKey" placeholder="请输入角色编码" />
         </n-form-item-grid-item>
         <n-form-item-grid-item :span="2" label="角色排序" path="roleSort">
-          <n-input-number v-model:value="formModel.roleSort" clearable :precision="0" :min="1" :step="1" />
+          <n-input-number v-model:value="formModel.roleSort" clearable :precision="0" :min="0" :step="1" />
         </n-form-item-grid-item>
         <n-form-item-grid-item :span="2" label="角色状态" path="status">
           <n-switch
@@ -210,7 +246,7 @@ function formatMenuForTree(menu: Entity.MenuItem): TreeOption {
             </template>
           </n-switch>
         </n-form-item-grid-item>
-        <n-form-item-grid-item :span="2" label="菜单权限">
+        <n-form-item-grid-item v-if="menuTreeData.length > 0" :span="2" label="菜单权限">
           <n-tree
             :data="menuTreeData"
             :checked-keys="formModel.menuIds"
@@ -222,6 +258,20 @@ function formatMenuForTree(menu: Entity.MenuItem): TreeOption {
             :virtual-scroll="true"
             style="max-height: 300px; overflow: auto"
             @update:checked-keys="(keys: number[]) => formModel.menuIds = keys"
+          />
+        </n-form-item-grid-item>
+        <n-form-item-grid-item v-if="apiTreeData.length > 0" :span="2" label="接口权限">
+          <n-tree
+            :data="apiTreeData"
+            :checked-keys="formModel.apiIds"
+            checkable
+            selectable
+            :block-line="true"
+            cascade
+            check-strategy="child"
+            :virtual-scroll="true"
+            style="max-height: 300px; overflow: auto"
+            @update:checked-keys="(keys: number[]) => formModel.apiIds = keys"
           />
         </n-form-item-grid-item>
       </n-grid>

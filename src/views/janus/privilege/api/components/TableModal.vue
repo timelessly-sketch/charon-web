@@ -5,43 +5,46 @@ import type {
 import HelpInfo from '@/components/common/HelpInfo.vue'
 import { Regex } from '@/constants'
 import { useBoolean } from '@/hooks'
-import { fetchMenuEdit } from '@/service/api/privilege'
+import { fetchApiEdit } from '@/service/api/privilege'
 
 interface Props {
   modalName?: string
-  allRoutes: AppRoute.RowRoute[]
+  allApis: AppRoute.Api[]
 }
 
 const {
   modalName = '',
-  allRoutes,
+  allApis,
 } = defineProps<Props>()
 
 const emit = defineEmits<{
   open: []
   close: []
-  update: [router: AppRoute.RowRoute]
+  update: [router: AppRoute.Api]
 }>()
 
 const { bool: modalVisible, setTrue: showModal, setFalse: hiddenModal } = useBoolean(false)
 const { bool: submitLoading, setTrue: startLoading, setFalse: endLoading } = useBoolean(false)
 
-const formDefault: AppRoute.RowRoute = {
+const formDefault: AppRoute.Api = {
   name: '',
   path: '',
   id: 0,
-  pid: null,
+  pid: 0,
   title: '',
-  order: 0,
-  requiresAuth: true,
-  keepAlive: false,
-  hide: false,
-  withoutTab: true,
-  pinTab: false,
-  menuType: 'page',
+  apiType: 'dir',
+  method: '',
+  icon: '',
   platformCode: '',
 }
-const formModel = ref<AppRoute.RowRoute>({ ...formDefault })
+const apiMethod = {
+  GET: 'GET',
+  POST: 'POST',
+  PUT: 'PUT',
+  DELETE: 'DELETE',
+} as const
+
+const formModel = ref<AppRoute.Api>({ ...formDefault })
 
 type ModalType = 'add' | 'view' | 'edit'
 const modalType = shallowRef<ModalType>('add')
@@ -54,7 +57,7 @@ const modalTitle = computed(() => {
   return `${titleMap[modalType.value]}${modalName}`
 })
 
-async function openModal(type: ModalType = 'add', data: AppRoute.RowRoute, platformCode: string) {
+async function openModal(type: ModalType = 'add', data: AppRoute.Api, platformCode: string) {
   emit('open')
   modalType.value = type
   showModal()
@@ -72,6 +75,7 @@ async function openModal(type: ModalType = 'add', data: AppRoute.RowRoute, platf
       if (!data)
         return
       formModel.value = { ...data }
+      console.log(formModel.value,"内容")
     },
   }
   await handlers[type]()
@@ -92,7 +96,7 @@ async function submitModal() {
   const handlers = {
     async add() {
       return new Promise((resolve) => {
-        fetchMenuEdit(formModel.value).then((res: any) => {
+        fetchApiEdit(formModel.value).then((res: any) => {
           if (res.isSuccess) {
             window.$message.success('新增成功')
             resolve(true)
@@ -103,7 +107,7 @@ async function submitModal() {
     },
     async edit() {
       return new Promise((resolve) => {
-        fetchMenuEdit(formModel.value).then((res: any) => {
+        fetchApiEdit(formModel.value).then((res: any) => {
           if (res.isSuccess) {
             window.$message.success('编辑成功')
             resolve(true)
@@ -124,7 +128,7 @@ async function submitModal() {
 }
 
 const dirTreeOptions = computed(() => {
-  return filterDirectory(JSON.parse(JSON.stringify(allRoutes)))
+  return filterDirectory(JSON.parse(JSON.stringify(allApis)))
 })
 
 function filterDirectory(node: any[]) {
@@ -137,7 +141,7 @@ function filterDirectory(node: any[]) {
         Reflect.deleteProperty(item, 'children')
     }
 
-    return (item.menuType === 'dir')
+    return (item.apiType === 'dir')
   })
 }
 
@@ -147,10 +151,10 @@ const rules = {
     // message: '请输入菜单名称',
     validator(rule: FormItemRule, value: string) {
       if (!value)
-        return new Error('请输入菜单名称')
+        return new Error('请输入接口名称')
 
       if (!new RegExp(Regex.RouteName).test(value))
-        return new Error('菜单只能包含英文数字_!@#$%^&*~-')
+        return new Error('接口只能包含英文数字_!@#$%^&*~-')
 
       return true
     },
@@ -158,17 +162,12 @@ const rules = {
   },
   path: {
     required: true,
-    message: '请输入菜单路径',
-    trigger: 'blur',
-  },
-  componentPath: {
-    required: true,
-    message: '请输入组件路径',
+    message: '请输入接口路径',
     trigger: 'blur',
   },
   title: {
     required: true,
-    message: '请输入菜单标题',
+    message: '请输入接口标题',
     trigger: 'blur',
   },
 }
@@ -199,23 +198,20 @@ const rules = {
             label-field="title" children-field="children" placeholder="请选择父级目录"
           />
         </n-form-item-grid-item>
-        <n-form-item-grid-item :span="1" label="菜单名称" path="name">
+        <n-form-item-grid-item :span="1" label="接口名称" path="name">
           <n-input v-model:value="formModel.name" placeholder="Eg: system" />
         </n-form-item-grid-item>
         <n-form-item-grid-item :span="1" label="标题" path="title">
           <n-input v-model:value="formModel.title" placeholder="Eg: My-System" />
         </n-form-item-grid-item>
-        <n-form-item-grid-item :span="2" label="路由路径" path="path">
-          <n-input v-model:value="formModel.path" placeholder="Eg: /system/user" />
-        </n-form-item-grid-item>
-        <n-form-item-grid-item :span="1" label="菜单类型" path="menuType">
-          <n-radio-group v-model:value="formModel.menuType" name="radiogroup">
+        <n-form-item-grid-item :span="1" label="接口类型" path="menuType">
+          <n-radio-group v-model:value="formModel.apiType" name="radiogroup">
             <n-space>
               <n-radio value="dir">
                 目录
               </n-radio>
-              <n-radio value="page">
-                页面
+              <n-radio value="api">
+                接口
               </n-radio>
             </n-space>
           </n-radio-group>
@@ -223,50 +219,17 @@ const rules = {
         <n-form-item-grid-item :span="1" label="图标" path="icon">
           <icon-select v-model:value="formModel.icon" :disabled="modalType === 'view'" />
         </n-form-item-grid-item>
-        <n-form-item-grid-item v-if="formModel.menuType === 'page'" :span="2" label="组件路径" path="componentPath">
-          <n-input v-model:value="formModel.componentPath" placeholder="Eg: /system/user/index.vue" />
+        <n-form-item-grid-item v-if="formModel.apiType === 'api'" span="2" label="接口方法" path="method">
+          <n-radio-group v-model:value="formModel.method">
+            <n-space>
+              <n-radio v-for="v in apiMethod" :key="v" :value="v">
+                {{ v }}
+              </n-radio>
+            </n-space>
+          </n-radio-group>
         </n-form-item-grid-item>
-        <n-form-item-grid-item :span="1" path="order">
-          <template #label>
-            菜单排序
-            <HelpInfo message="数字越小，同级中越靠前" />
-          </template>
-          <n-input-number v-model:value="formModel.order" clearable :precision="0" :min="0" :step="1" />
-        </n-form-item-grid-item>
-        <n-form-item-grid-item v-if="formModel.menuType === 'page'" :span="1" path="href">
-          <template #label>
-            外链页面
-            <HelpInfo message="填写后，点击菜单将跳转到该地址，组件路径任意填写" />
-          </template>
-          <n-input v-model:value="formModel.href" placeholder="Eg: https://example.com" />
-        </n-form-item-grid-item>
-        <n-form-item-grid-item
-          v-if="formModel.menuType === 'page'" :span="1" label="页面缓存"
-          path="keepAlive"
-        >
-          <n-switch v-model:value="formModel.keepAlive" />
-        </n-form-item-grid-item>
-        <n-form-item-grid-item
-          v-if="formModel.menuType === 'page'" :span="1" label="标签栏可见"
-          path="withoutTab"
-        >
-          <n-switch v-model:value="formModel.withoutTab" />
-        </n-form-item-grid-item>
-        <n-form-item-grid-item v-if="formModel.menuType === 'page'" :span="1" label="常驻标签栏" path="pinTab">
-          <n-switch v-model:value="formModel.pinTab" />
-        </n-form-item-grid-item>
-        <n-form-item-grid-item :span="1" label="侧边菜单隐藏" path="hide">
-          <n-switch v-model:value="formModel.hide" />
-        </n-form-item-grid-item>
-        <n-form-item-grid-item
-          v-if="formModel.menuType === 'page' && formModel.hide" :span="2"
-          path="activeMenu"
-        >
-          <template #label>
-            高亮菜单
-            <HelpInfo message="当前路由不在左侧菜单显示，但需要高亮某个菜单" />
-          </template>
-          <n-input v-model:value="formModel.activeMenu" />
+        <n-form-item-grid-item v-if="formModel.apiType === 'api'" :span="2" label="接口路径" path="path">
+          <n-input v-model:value="formModel.path" placeholder="Eg: /system/user/list" />
         </n-form-item-grid-item>
       </n-grid>
     </n-form>

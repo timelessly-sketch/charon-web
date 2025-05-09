@@ -83,6 +83,12 @@ const columns: DataTableColumns<AppRoute.RowRoute> = [
     },
   },
   {
+    title: '创建时间',
+    align: 'center',
+    key: 'createdAt',
+    width: 240,
+  },
+  {
     title: '操作',
     align: 'center',
     key: 'actions',

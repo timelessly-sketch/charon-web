@@ -8,7 +8,9 @@ namespace Entity {
     status?: number
     createdAt?: Date
     menuIds?: number[]
+    apiIds?: number[]
     menuList?: AppRoute.RowRoute[]
+    apiList?: AppRoute.Api[]
   }
   interface CascaderNode {
     label: string

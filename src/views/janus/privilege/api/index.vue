@@ -2,55 +2,89 @@
 import type { DataTableColumns } from 'naive-ui'
 import { useBoolean } from '@/hooks'
 import { fetchPlatFormList } from '@/service'
-import { createIcon } from '@/utils'
+import { arrayToTree, createIcon } from '@/utils'
 import { NButton, NPopconfirm, NSpace, NTag } from 'naive-ui'
-import { fetchRoleList } from '@/service/api/privilege'
 import TableModal from './components/TableModal.vue'
+import { fetchApiList } from '@/service/api/privilege'
 
 const { bool: loading, setTrue: startLoading, setFalse: endLoading } = useBoolean(false)
 
 function deleteData(id: number) {
-  window.$message.success(`删除角色id:${id}`)
+  window.$message.success(`删除菜单id:${id}`)
 }
 
 const tableModalRef = ref()
 
-const columns: DataTableColumns<Entity.AuthRole> = [
+const columns: DataTableColumns<AppRoute.Api> = [
   {
-    title: '角色名称',
-    key: 'roleName',
-    align: 'center',
+    type: 'selection',
+    width: 30,
+  },
+  {
+    title: '名称',
+    key: 'name',
     width: 200,
   },
   {
-    title: '角色编码',
-    key: 'roleKey',
+    title: '图标',
     align: 'center',
-    width: 200,
-  },
-  {
-    title: '排序值',
-    key: 'roleSort',
-    align: 'center',
+    key: 'icon',
     width: '6em',
+    render: (row) => {
+      return row.icon && createIcon(row.icon, { size: 20 })
+    },
   },
   {
-    title: '状态',
+    title: '标题',
     align: 'center',
-    key: 'status',
-    render(row) {
-      return h(NTag, {
-        type: row.status === 1 ? 'success' : 'error',
-        bordered: false,
-      }, {
-        default: () => row.status === 1 ? '正常' : '禁用',
-      })
+    key: 'title',
+    ellipsis: {
+      tooltip: true,
+    },
+  },
+  {
+    title: '接口路径',
+    key: 'path',
+    ellipsis: {
+      tooltip: true,
+    },
+    render: (row) => {
+      return row.path || '-'
+    },
+  },
+  {
+    title: '方法',
+    align: 'center',
+    key: 'method',
+    render: (row) => {
+      return row.method || '-'
+    },
+  },
+  {
+    title: '接口类型',
+    align: 'center',
+    key: 'apiType',
+    width: '6em',
+    render: (row) => {
+      const apiType = row.apiType || 'page'
+      const apiTagType: Record<AppRoute.ApiType, NaiveUI.ThemeColor> = {
+        dir: 'primary',
+        api: 'warning',
+      }
+      return <NTag type={apiTagType[apiType]}>{apiType}</NTag>
     },
   },
   {
     title: '创建时间',
     align: 'center',
     key: 'createdAt',
+    width: 200,
+  },
+  {
+    title: '更新时间',
+    align: 'center',
+    key: 'updatedAt',
+    width: 200,
   },
   {
     title: '操作',
@@ -60,6 +94,12 @@ const columns: DataTableColumns<Entity.AuthRole> = [
     render: (row) => {
       return (
         <NSpace justify="center">
+          <NButton
+            size="small"
+            onClick={() => tableModalRef.value.openModal('view', row)}
+          >
+            查看
+          </NButton>
           <NButton
             size="small"
             onClick={() => tableModalRef.value.openModal('edit', row)}
@@ -78,47 +118,45 @@ const columns: DataTableColumns<Entity.AuthRole> = [
   },
 ]
 
-const tableData = ref<Entity.AuthRole[]>([])
+const tableData = ref<AppRoute.Api[]>([])
 const platformData = ref<Entity.Platform[]>([])
 const currentPlatform = ref<Entity.Platform>()
 
 onMounted(() => {
-  getRoleList()
+  getApiList()
 })
 
-async function getRoleList() {
+async function getApiList() {
   startLoading()
   await fetchPlatFormList({ page: 1, size: 99 }).then((res: any) => {
     platformData.value = res.data.records || []
   })
-  if (!currentPlatform.value) {
-    currentPlatform.value = platformData.value[0]
-  }
+  currentPlatform.value = platformData.value[0]
   if (!currentPlatform.value.platformCode) {
     return
   }
-  await loadRoleData()
+  await loadApiData()
   endLoading()
 }
 
 async function handlePlatformClick(platform: Entity.Platform) {
   currentPlatform.value = platform
   if (platform.platformCode) {
-    await loadRoleData()
+    await loadApiData()
   }
   else {
     window.$message.warning('该平台未配置编码')
   }
 }
 
-async function loadRoleData() {
+async function loadApiData() {
   startLoading()
   if (!currentPlatform.value?.platformCode) {
     window.$message.warning('请先选择有效平台')
     return
   }
-  await fetchRoleList(currentPlatform.value.platformCode).then((res: any) => {
-    tableData.value = res.data.records || []
+  await fetchApiList(currentPlatform.value.platformCode).then((res: any) => {
+    tableData.value = arrayToTree(res.data.records || [])
   })
   endLoading()
 }
@@ -170,7 +208,7 @@ async function handlePositiveClick() {
 
         <template #header-extra>
           <n-flex>
-            <NButton type="primary" secondary @click="getRoleList">
+            <NButton type="primary" secondary @click="getApiList">
               <template #icon>
                 <icon-park-outline-refresh />
               </template>
@@ -197,7 +235,7 @@ async function handlePositiveClick() {
           :loading="loading"
           size="small"
         />
-        <TableModal ref="tableModalRef" :all-roles="tableData" modal-name="菜单" @update="loadRoleData" />
+        <TableModal ref="tableModalRef" :all-apis="tableData" modal-name="菜单" @update="loadApiData" />
       </n-card>
     </NSpace>
   </n-flex>

@@ -40,6 +40,7 @@ export const useRouteStore = defineStore('route-store', {
     async initRouteInfo() {
       if (import.meta.env.VITE_ROUTE_LOAD_MODE === 'dynamic') {
         const userInfo = local.get('userInfo')
+        const code = local.get('platformCode')
 
         if (!userInfo || !userInfo.id) {
           const authStore = useAuthStore()
@@ -48,7 +49,9 @@ export const useRouteStore = defineStore('route-store', {
         }
 
         // Get user's route
-        const { data } = await fetchUserRoutes()
+        const { data } = await fetchUserRoutes({
+          platformCode: code || '',
+        })
 
         if (!data.records)
           return
@@ -73,7 +76,7 @@ export const useRouteStore = defineStore('route-store', {
 
       // Generate actual route and insert
       const routes = createRoutes(rowRoutes)
-      console.log(routes,"路由信息")
+      console.log(routes, '路由信息')
       router.addRoute(routes)
 
       // Generate side menu

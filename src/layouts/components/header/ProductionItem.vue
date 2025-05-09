@@ -4,6 +4,7 @@ import { BagOutline as BagOutlineIcon } from '@vicons/ionicons5'
 import { ref } from 'vue'
 import { fetchPlatformOptions } from '@/service'
 import { useBoolean } from '@/hooks'
+import { local } from '@/utils'
 
 const { bool: loading, setTrue: startLoading, setFalse: endLoading } = useBoolean(false)
 
@@ -15,6 +16,7 @@ const platforms = ref<any[]>([])
 function handleClickMenu(key: string) {
   const selected = platforms.value.find(item => item.key === key)
   if (selected) {
+    local.set('platformCode', selected.key)
     window.location.href = selected.defaultRoute
   }
   else {
@@ -62,7 +64,7 @@ onUnmounted(() => {
     :loading="loading"
     @update:show="(val) => (showPopover = val)"
   >
-    <NGrid :cols="5" :x-gap="16" :y-gap="16" :style="{ padding: '10px', width: `${gridWidth}px` }">
+    <NGrid :cols="6" :x-gap="16" :y-gap="16" :style="{ padding: '10px', width: `${gridWidth}px` }">
       <NGi
         v-for="item in platforms"
         :key="item.key"

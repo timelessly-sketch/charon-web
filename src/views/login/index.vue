@@ -1,12 +1,10 @@
 <script setup lang="ts">
-import { Login, Register, ResetPwd } from './components'
+import { Login } from './components'
 
-  type IformType = 'login' | 'register' | 'resetPwd'
+type IformType = 'login'
 const formType: Ref<IformType> = ref('login')
 const formComponets = {
   login: Login,
-  register: Register,
-  resetPwd: ResetPwd,
 }
 
 const appName = import.meta.env.VITE_APP_NAME

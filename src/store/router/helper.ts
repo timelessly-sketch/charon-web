@@ -1,6 +1,6 @@
 import type { MenuOption } from 'naive-ui'
 import type { RouteRecordRaw } from 'vue-router'
-import { usePermission } from '@/hooks'
+// import { usePermission } from '@/hooks'
 import Layout from '@/layouts/index.vue'
 import { $t, arrayToTree, renderIcon } from '@/utils'
 import { clone, min, omit, pick } from 'radash'
@@ -19,13 +19,13 @@ function standardizedRoutes(route: AppRoute.RowRoute[]) {
 }
 
 export function createRoutes(routes: AppRoute.RowRoute[]) {
-  const { hasPermission } = usePermission()
+  // const { hasPermission } = usePermission()
 
   // Structure the meta field
   let resultRouter = standardizedRoutes(routes)
 
   // Route permission filtering
-  resultRouter = resultRouter.filter(i => hasPermission(i.meta.roles))
+  // resultRouter = resultRouter.filter(i => hasPermission(i.meta.roles))
 
   // Generate routes, no need to import files for those with redirect
   const modules = import.meta.glob('@/views/**/*.vue')
@@ -103,10 +103,10 @@ export function createMenus(userRoutes: AppRoute.RowRoute[]) {
 
 // render the returned routing table as a sidebar
 function transformAuthRoutesToMenus(userRoutes: AppRoute.Route[]) {
-  const { hasPermission } = usePermission()
+  // const { hasPermission } = usePermission()
   return userRoutes
     // Filter out side menus without permission
-    .filter(i => hasPermission(i.meta.roles))
+    // .filter(i => hasPermission(i.meta.roles))
     //  Sort the menu according to the workflow size
     .sort((a, b) => (a.meta?.order ?? 0) - (b.meta?.order ?? 0))
     // Convert to side menu data structure

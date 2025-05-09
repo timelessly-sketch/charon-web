@@ -1,15 +1,9 @@
 <script setup lang="ts">
 import type { FormInst } from 'naive-ui'
 import { useAuthStore } from '@/store'
-import { local } from '@/utils'
-
-const emit = defineEmits(['update:modelValue'])
+import { $t, local } from '@/utils'
 
 const authStore = useAuthStore()
-
-function toOtherForm(type: any) {
-  emit('update:modelValue', type)
-}
 
 const { t } = useI18n()
 const rules = computed(() => {
@@ -87,19 +81,10 @@ function checkUserAccount() {
           <n-checkbox v-model:checked="isRemember">
             {{ $t('login.rememberMe') }}
           </n-checkbox>
-          <n-button type="primary" text @click="toOtherForm('resetPwd')">
-            {{ $t('login.forgotPassword') }}
-          </n-button>
         </div>
         <n-button block type="primary" size="large" :loading="isLoading" :disabled="isLoading" @click="handleLogin">
           {{ $t('login.signIn') }}
         </n-button>
-        <n-flex>
-          <n-text>{{ $t('login.noAccountText') }}</n-text>
-          <n-button type="primary" text @click="toOtherForm('register')">
-            {{ $t('login.signUp') }}
-          </n-button>
-        </n-flex>
       </n-space>
     </n-form>
     <n-divider>
@@ -114,11 +99,6 @@ function checkUserAccount() {
       <n-button circle>
         <template #icon>
           <n-icon><icon-park-outline-tencent-qq /></n-icon>
-        </template>
-      </n-button>
-      <n-button circle>
-        <template #icon>
-          <n-icon><icon-park-outline-github-one /></n-icon>
         </template>
       </n-button>
     </n-space>

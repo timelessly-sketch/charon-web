@@ -5,7 +5,7 @@ import type {
 import { Regex } from '@/constants'
 import { useBoolean } from '@/hooks'
 import { Tree } from '@/utils/tree'
-import {fetchApiList, fetchMenuList, fetchRoleDetail, fetchRoleEdit} from '@/service/api/privilege'
+import { fetchApiList, fetchMenuList, fetchRoleDetail, fetchRoleEdit } from '@/service/api/privilege'
 
 interface TreeOption {
   label: string

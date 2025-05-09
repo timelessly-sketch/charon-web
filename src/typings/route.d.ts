@@ -15,6 +15,8 @@ declare namespace AppRoute {
     hide?: boolean
     /* 菜单排序。 */
     order?: number
+    /* 可以访问的角色 */
+    roles?: Entity.RoleType[]
     /* 嵌套外链  */
     href?: string
     /** 当前路由不在左侧菜单显示，但需要高亮某个菜单的情况 */

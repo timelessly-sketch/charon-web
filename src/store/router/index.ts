@@ -76,7 +76,6 @@ export const useRouteStore = defineStore('route-store', {
 
       // Generate actual route and insert
       const routes = createRoutes(rowRoutes)
-      console.log(routes, '路由信息')
       router.addRoute(routes)
 
       // Generate side menu

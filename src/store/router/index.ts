@@ -56,6 +56,10 @@ export const useRouteStore = defineStore('route-store', {
         if (!data.records)
           return
 
+        if (!code && data.records.length > 0) {
+          local.set('platformCode', data.records[0].platformCode)
+        }
+
         return data.records
       }
       else {

@@ -12,7 +12,7 @@ export function transformToCascader(roles: Entity.AuthRole[]): Entity.CascaderNo
     // 处理平台节点（value 为字符串）
     if (!platformMap.has(platformCode)) {
       platformMap.set(platformCode, {
-        label: platformCode.toUpperCase(),
+        label: platformCode,
         value: `platform_${platformCode}`, // 平台节点 value 是字符串
         children: [],
         selectable: false,

@@ -125,9 +125,11 @@ const rules = {
 
 const treeOptions = ref<Entity.CascaderNode[]>([])
 async function getUserDetail(id: number) {
+  startLoading()
   const { data } = await fetchUserDetail(id)
   treeOptions.value = transformToCascader(data.roles)
   formModel.value.roleIds = data.roleIds
+  endLoading()
 }
 </script>
 

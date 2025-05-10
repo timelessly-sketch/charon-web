@@ -48,6 +48,7 @@ export const useAuthStore = defineStore('auth-store', {
     clearAuthStorage() {
       local.remove('token')
       local.remove('userInfo')
+      local.remove('platformCode')
     },
 
     /* 用户登录 */

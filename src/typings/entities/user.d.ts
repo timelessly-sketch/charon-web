@@ -18,7 +18,7 @@ namespace Entity {
     /* 用户电话 */
     phone?: string
     /** 用户角色类型 */
-    roleIds?: number[]
+    roleIds: number[]
     /** 用户状态 */
     status?: 0 | 1
     /** 备注 */

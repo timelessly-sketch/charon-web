@@ -62,11 +62,9 @@ const appStore = useAppStore()
       <!-- 121 = 16 + 45 + 60 45是面包屑高度 60是标签栏高度 -->
       <!-- 56 = 16 + 40 40是页脚高度 -->
       <div
-        class="flex-1 p-10px flex flex-col"
+        class="flex-1 p-10px flex flex-col p-t-131px"
         :class="{
-          'p-t-131px': appStore.showTabs,
           'p-b-56px': appStore.showFooter,
-          // 'p-t-132px': !appStore.showTabs,
         }"
       >
         <router-view v-slot="{ Component, route }" class="flex-1">

@@ -64,10 +64,9 @@ const appStore = useAppStore()
       <div
         class="flex-1 p-10px flex flex-col"
         :class="{
-          'p-t-181px': appStore.showTabs,
-          'p-b-56px': appStore.showFooter && !appStore.contentFullScreen,
-          'p-t-132px': !appStore.showTabs,
-          'p-t-61px': appStore.contentFullScreen,
+          'p-t-131px': appStore.showTabs,
+          'p-b-56px': appStore.showFooter,
+          // 'p-t-132px': !appStore.showTabs,
         }"
       >
         <router-view v-slot="{ Component, route }" class="flex-1">

@@ -61,7 +61,6 @@ export function createAlovaInstance(
     //   alovaConfig.beforeRequest?.(method)
     // }),
     beforeRequest: (method) => {
-      // 添加 Token
       method.config.headers.Authorization = `Bearer ${local.get('token')}`
 
       // 处理表单提交

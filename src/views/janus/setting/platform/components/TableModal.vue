@@ -79,15 +79,15 @@ const formRef = ref()
 async function submitModal() {
   const handlers = {
     async add() {
-      // return new Promise((resolve) => {
-      //   // fetchUserEdit(formModel.value).then((res: any) => {
-      //   //   if (res.isSuccess) {
-      //   //     window.$message.success('新增成功')
-      //   //     resolve(true)
-      //   //   }
-      //   //   resolve(false)
-      //   // })
-      // })
+      return new Promise((resolve) => {
+        fetchPlatformEdit(formModel.value).then((res: any) => {
+          if (res.isSuccess) {
+            window.$message.success('新增成功')
+            resolve(true)
+          }
+          resolve(false)
+        })
+      })
     },
     async edit() {
       return new Promise((resolve) => {
@@ -112,10 +112,10 @@ async function submitModal() {
 }
 
 const rules = {
-  nickName: { required: true, message: '请输入昵称', trigger: 'blur' },
-  userName: { required: true, message: '请输入用户名', trigger: 'blur' },
-  name: { required: true, message: '请输入用户姓名', trigger: 'blur' },
-  userId: { required: true, message: '请输入用户ID', trigger: 'blur' },
+  platformName: { required: true, message: '请输入平台名称', trigger: 'blur' },
+  platformCode: { required: true, message: '请输入平台编码', trigger: 'blur' },
+  serverUrl: { required: true, message: '请输入平台地址', trigger: 'blur' },
+  defaultRoute: { required: true, message: '请输入平台默认路由', trigger: 'blur' },
 }
 </script>
 
@@ -137,7 +137,7 @@ const rules = {
           <n-input v-model:value="formModel.platformName" />
         </n-form-item-grid-item>
         <n-form-item-grid-item :span="2" label="平台编码" path="platformCode">
-          <n-input v-model:value="formModel.platformCode" />
+          <n-input v-model:value="formModel.platformCode" :disabled="modalType === 'edit'" />
         </n-form-item-grid-item>
         <n-form-item-grid-item :span="2" label="平台地址" path="serverUrl">
           <n-input v-model:value="formModel.serverUrl" />

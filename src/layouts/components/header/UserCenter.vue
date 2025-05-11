@@ -1,7 +1,5 @@
 <script setup lang="ts">
 import { useAuthStore } from '@/store'
-import { renderIcon } from '@/utils/icon'
-import IconBookOpen from '~icons/icon-park-outline/book-open'
 import IconGithub from '~icons/icon-park-outline/github'
 import IconLogout from '~icons/icon-park-outline/logout'
 import IconUser from '~icons/icon-park-outline/user'
@@ -14,8 +12,8 @@ const router = useRouter()
 const options = computed(() => {
   return [
     {
-      label: t('app.userCenter'),
-      key: 'userCenter',
+      label: t('app.user'),
+      key: 'user',
       icon: () => h(IconUser),
     },
     {
@@ -24,22 +22,8 @@ const options = computed(() => {
     },
     {
       label: 'Github',
-      key: 'guthub',
+      key: 'github',
       icon: () => h(IconGithub),
-    },
-    {
-      label: 'Gitee',
-      key: 'gitee',
-      icon: renderIcon('simple-icons:gitee'),
-    },
-    {
-      label: 'Docs',
-      key: 'docs',
-      icon: () => h(IconBookOpen),
-    },
-    {
-      type: 'divider',
-      key: 'd1',
     },
     {
       label: t('app.loginOut'),
@@ -60,17 +44,11 @@ function handleSelect(key: string | number) {
       },
     })
   }
-  if (key === 'userCenter')
-    router.push('/userCenter')
+  if (key === 'user')
+    router.push('/janus/user')
 
-  if (key === 'guthub')
+  if (key === 'github')
     window.open('https://github.com/chansee97/nova-admin')
-
-  if (key === 'gitee')
-    window.open('https://gitee.com/chansee97/nova-admin')
-
-  if (key === 'docs')
-    window.open('https://nova-admin-docs.pages.dev/')
 }
 </script>
 

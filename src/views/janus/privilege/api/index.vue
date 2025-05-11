@@ -235,7 +235,7 @@ async function handlePositiveClick() {
           :loading="loading"
           size="small"
         />
-        <TableModal ref="tableModalRef" :all-apis="tableData" modal-name="菜单" @update="loadApiData" />
+        <TableModal ref="tableModalRef" :all-apis="tableData" modal-name="接口" @update="loadApiData" />
       </n-card>
     </NSpace>
   </n-flex>

@@ -38,12 +38,12 @@ const columns: DataTableColumns<Entity.User> = [
   {
     title: '用户昵称',
     align: 'center',
-    key: 'nickName',
+    key: 'nickname',
   },
   {
     title: '英文名',
     align: 'center',
-    key: 'userName',
+    key: 'username',
   },
   {
     title: '用户姓名',
@@ -97,7 +97,7 @@ const columns: DataTableColumns<Entity.User> = [
           >
             编辑
           </NButton>
-          <NPopconfirm onPositiveClick={() => resetPassword(row.userName!)}>
+          <NPopconfirm onPositiveClick={() => resetPassword(row.id!, row.username!)}>
             {{
               default: () => '重置密码后用户名与密码一致。',
               trigger: () => <NButton size="small" type="warning">重置密码</NButton>,
@@ -133,9 +133,9 @@ async function getUserList() {
   })
 }
 
-async function resetPassword(username: string) {
+async function resetPassword(id: number, password: string) {
   startLoading()
-  const { isSuccess } = await fetchResetPass(username)
+  const { isSuccess } = await fetchResetPass({ id, password })
   if (isSuccess) {
     window.$message?.success('重置成功')
   }

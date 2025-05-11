@@ -4,7 +4,7 @@ namespace Entity {
     /** 用户id */
     id?: number
     /** 用户名 */
-    userName?: string
+    username?: string
     name?: string
     userId?: string
     /* 用户头像 */
@@ -14,7 +14,7 @@ namespace Entity {
     /* 用户邮箱 */
     email?: string
     /* 用户昵称 */
-    nickName?: string
+    nickname?: string
     /* 用户电话 */
     phone?: string
     /** 用户角色类型 */

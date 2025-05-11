@@ -258,16 +258,6 @@ const rules = {
         <n-form-item-grid-item :span="1" label="侧边菜单隐藏" path="hide">
           <n-switch v-model:value="formModel.hide" />
         </n-form-item-grid-item>
-        <n-form-item-grid-item
-          v-if="formModel.menuType === 'page' && formModel.hide" :span="2"
-          path="activeMenu"
-        >
-          <template #label>
-            高亮菜单
-            <HelpInfo message="当前路由不在左侧菜单显示，但需要高亮某个菜单" />
-          </template>
-          <n-input v-model:value="formModel.activeMenu" />
-        </n-form-item-grid-item>
       </n-grid>
     </n-form>
     <template v-if="modalType !== 'view'" #action>

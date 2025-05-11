@@ -75,7 +75,6 @@ async function openModal(type: ModalType = 'add', data: AppRoute.Api, platformCo
       if (!data)
         return
       formModel.value = { ...data }
-      console.log(formModel.value,"内容")
     },
   }
   await handlers[type]()
@@ -169,6 +168,15 @@ const rules = {
     required: true,
     message: '请输入接口标题',
     trigger: 'blur',
+  },
+  method: {
+    validator(rule: FormItemRule, value: string) {
+      if (formModel.value.apiType === 'api' && !value) {
+        return new Error('请选择接口方法')
+      }
+      return true
+    },
+    trigger: 'change',
   },
 }
 </script>

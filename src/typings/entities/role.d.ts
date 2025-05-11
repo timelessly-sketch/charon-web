@@ -1,5 +1,5 @@
 namespace Entity {
-  type RoleType = 'super' | 'admin' | 'user'
+  type RoleType = ''
   interface AuthRole {
     id: number
     roleName?: string

@@ -158,6 +158,8 @@ const rules = {
 const menuTreeData = ref<TreeOption[]>([])
 const apiTreeData = ref<TreeOption[]>([])
 async function getRoleDetail(id: number) {
+  menuTreeData.value = []
+  apiTreeData.value = []
   startLoading()
   const { data } = await fetchRoleDetail(id)
   // 处理菜单树

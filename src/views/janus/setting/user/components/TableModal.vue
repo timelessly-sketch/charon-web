@@ -23,10 +23,10 @@ const { bool: submitLoading, setTrue: startLoading, setFalse: endLoading } = use
 
 const formDefault: Entity.User = {
   id: 0,
-  userName: '',
+  username: '',
   name: '',
   email: '',
-  nickName: '',
+  nickname: '',
   phone: '',
   roleIds: [],
   status: 1,
@@ -148,10 +148,10 @@ async function getUserDetail(id: number) {
     <n-form ref="formRef" :rules="rules" label-placement="left" :model="formModel" :label-width="100" :disabled="modalType === 'view'">
       <n-grid :cols="2" :x-gap="18">
         <n-form-item-grid-item :span="1" label="昵称" path="nickName">
-          <n-input v-model:value="formModel.nickName" />
+          <n-input v-model:value="formModel.nickname" />
         </n-form-item-grid-item>
         <n-form-item-grid-item :span="1" label="用户名" path="userName">
-          <n-input v-model:value="formModel.userName" />
+          <n-input v-model:value="formModel.username" />
         </n-form-item-grid-item>
         <n-form-item-grid-item :span="1" label="用户姓名" path="name">
           <n-input v-model:value="formModel.name" />

@@ -22,8 +22,8 @@ export function fetchUserDetail(id: number) {
   return request.Get<Service.ResponseResult<any>>(`/system/user/detail/${id}`)
 }
 
-export function fetchResetPass(username: string) {
-  return request.Post<Service.ResponseResult<any>>(`/system/user/reset`, { username })
+export function fetchResetPass(params: { id: number, password: string }) {
+  return request.Post<Service.ResponseResult<any>>(`/system/user/resetPwd`, params)
 }
 
 export function fetchPlatFormList(params: { page: number, size: number }) {

@@ -2,6 +2,7 @@
 import type { FormInst } from 'naive-ui'
 import { useAuthStore } from '@/store'
 import { $t, local } from '@/utils'
+import Account from './account.vue'
 
 const authStore = useAuthStore()
 
@@ -21,7 +22,7 @@ const rules = computed(() => {
   }
 })
 const formValue = ref({
-  account: 'admin',
+  account: 'adminzhang',
   pwd: '1234567',
 })
 const isRemember = ref(false)
@@ -55,13 +56,16 @@ function checkUserAccount() {
   formValue.value = loginAccount
   isRemember.value = true
 }
+
+async function accountLogin(username: string, password: string) {
+  isLoading.value = true
+  await authStore.login(username, password)
+  isLoading.value = false
+}
 </script>
 
 <template>
   <div>
-    <n-h2 depth="3" class="text-center">
-      {{ $t('login.signInTitle') }}
-    </n-h2>
     <n-form ref="formRef" :rules="rules" :model="formValue" :show-label="false" size="large">
       <n-form-item path="account">
         <n-input v-model:value="formValue.account" clearable :placeholder="$t('login.accountPlaceholder')" />
@@ -87,21 +91,7 @@ function checkUserAccount() {
         </n-button>
       </n-space>
     </n-form>
-    <n-divider>
-      <span op-80>{{ $t('login.or') }}</span>
-    </n-divider>
-    <n-space justify="center">
-      <n-button circle>
-        <template #icon>
-          <n-icon><icon-park-outline-wechat /></n-icon>
-        </template>
-      </n-button>
-      <n-button circle>
-        <template #icon>
-          <n-icon><icon-park-outline-tencent-qq /></n-icon>
-        </template>
-      </n-button>
-    </n-space>
+    <Account style="margin-top: 50px" @login="accountLogin" />
   </div>
 </template>
 

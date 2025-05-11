@@ -95,11 +95,11 @@
   },
   "login": {
     "signInTitle": "登录",
-    "accountPlaceholder": "输入账号",
+    "accountPlaceholder": "输入用户名",
     "passwordPlaceholder": "输入密码",
     "accountRuleTip": "请输入账户",
     "passwordRuleTip": "请输入密码",
-    "or": "其他",
+    "or": "演示角色登录",
     "signIn": "登录",
     "rememberMe": "记住我",
     "forgotPassword": "忘记密码？",

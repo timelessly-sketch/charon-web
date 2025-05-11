@@ -52,9 +52,9 @@ export const useAuthStore = defineStore('auth-store', {
     },
 
     /* 用户登录 */
-    async login(nickname: string, password: string) {
+    async login(username: string, password: string) {
       try {
-        const { isSuccess, data } = await fetchLogin({ nickname, password })
+        const { isSuccess, data } = await fetchLogin({ username, password })
         if (!isSuccess)
           return
 

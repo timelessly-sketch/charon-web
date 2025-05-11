@@ -117,8 +117,8 @@ async function submitModal() {
 }
 
 const rules = {
-  nickName: { required: true, message: '请输入昵称', trigger: 'blur' },
-  userName: { required: true, message: '请输入用户名', trigger: 'blur' },
+  nickname: { required: true, message: '请输入昵称', trigger: 'blur' },
+  username: { required: true, message: '请输入用户名', trigger: 'blur' },
   name: { required: true, message: '请输入用户姓名', trigger: 'blur' },
   userId: { required: true, message: '请输入用户ID', trigger: 'blur' },
 }

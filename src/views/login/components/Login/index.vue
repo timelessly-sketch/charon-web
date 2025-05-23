@@ -91,7 +91,7 @@ async function accountLogin(username: string, password: string) {
         </n-button>
       </n-space>
     </n-form>
-    <Account style="margin-top: 50px" @login="accountLogin" />
+    <Account style="margin-top: 70px" @login="accountLogin" />
   </div>
 </template>
 

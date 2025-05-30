@@ -159,7 +159,7 @@ function changePage(currentPage: number, currentPageSize: number) {
       <n-card>
         <n-form ref="formRef" :model="model" label-placement="left" inline :show-feedback="false">
           <n-flex>
-            <n-form-item label="用户名" path="username">
+            <n-form-item label="英文名" path="username">
               <n-input v-model:value="model.username" placeholder="请输入" />
             </n-form-item>
             <n-form-item label="用户姓名" path="name">

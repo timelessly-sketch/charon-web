@@ -33,8 +33,13 @@ export function fetchPlatFormList(params: { page: number, size: number }) {
 export function fetchPlatformEdit(params: Entity.Platform) {
   return request.Post<Service.ResponseResult<any>>(`/system/platform/edit`, params)
 }
+
 export function fetchPlatformOptions() {
   return request.Get<Service.ResponseResult<any>>('/system/platform/options')
+}
+
+export function fetchLogList(params: { page: number, size: number }) {
+  return request.Get<Service.ResponseResult<any>>(`/system/log/list`, { params })
 }
 /**
  * 请求获取字典列表

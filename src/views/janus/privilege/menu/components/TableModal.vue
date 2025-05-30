@@ -246,15 +246,6 @@ const rules = {
         >
           <n-switch v-model:value="formModel.keepAlive" />
         </n-form-item-grid-item>
-        <n-form-item-grid-item
-          v-if="formModel.menuType === 'page'" :span="1" label="标签栏可见"
-          path="withoutTab"
-        >
-          <n-switch v-model:value="formModel.withoutTab" />
-        </n-form-item-grid-item>
-        <n-form-item-grid-item v-if="formModel.menuType === 'page'" :span="1" label="常驻标签栏" path="pinTab">
-          <n-switch v-model:value="formModel.pinTab" />
-        </n-form-item-grid-item>
         <n-form-item-grid-item :span="1" label="侧边菜单隐藏" path="hide">
           <n-switch v-model:value="formModel.hide" />
         </n-form-item-grid-item>

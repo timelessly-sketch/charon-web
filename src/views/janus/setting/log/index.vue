@@ -1,6 +1,6 @@
 <script setup lang="tsx">
 import type { DataTableColumns, FormInst } from 'naive-ui'
-import { NButton, NCard, NDescriptions, NDescriptionsItem, NFlex, NSpace, NTag, NCode } from 'naive-ui'
+import { NButton, NCard, NCode, NDescriptions, NDescriptionsItem, NFlex, NSpace, NTag } from 'naive-ui'
 import { useBoolean } from '@/hooks'
 import { filterEmptyParams } from '@/utils/params'
 import { fetchLogList } from '@/service'
@@ -230,7 +230,7 @@ function handleBackToList() {
             </NDescriptionsItem>
           </NDescriptions>
 
-          <n-card
+          <NCard
             :bordered="false"
             class="proCard mt-4"
             size="small"
@@ -243,22 +243,22 @@ function handleBackToList() {
                 title="点击展开/折叠请求头详情"
                 name="headers"
               >
-                <n-code
+                <NCode
                   language="json"
                   :code="JSON.stringify(activeLog.headerData, null, 2)"
                   word-wrap
                 />
               </n-collapse-item>
             </n-collapse>
-          </n-card>
+          </NCard>
 
-          <n-card
+          <NCard
+            v-if="activeLog?.method === 'GET'"
             :bordered="false"
             class="proCard mt-4"
             size="small"
             :segmented="{ content: true }"
             title="GET参数"
-            v-if="activeLog?.method === 'GET'"
           >
             <n-collapse>
               <n-collapse-item
@@ -266,16 +266,16 @@ function handleBackToList() {
                 title="点击展开/折叠详情"
                 name="get"
               >
-                <n-code
+                <NCode
                   language="json"
                   :code="JSON.stringify(activeLog.getData, null, 2)"
                   word-wrap
                 />
               </n-collapse-item>
             </n-collapse>
-          </n-card>
+          </NCard>
 
-          <n-card
+          <NCard
             v-if="activeLog?.method === 'POST'"
             :bordered="false"
             class="proCard mt-4"
@@ -289,15 +289,14 @@ function handleBackToList() {
                 title="点击展开/折叠详情"
                 name="post"
               >
-                <n-code
+                <NCode
                   language="json"
                   :code="JSON.stringify(activeLog.postData, null, 2)"
                   word-wrap
                 />
               </n-collapse-item>
             </n-collapse>
-          </n-card>
-
+          </NCard>
         </div>
       </NCard>
     </NSpace>
